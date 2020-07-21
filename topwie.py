@@ -1,4 +1,4 @@
-import requests, re, dateutil.parser
+import requests, re
 from bs4 import BeautifulSoup as bs
 
 URL = "https://en.wikipedia.org/wiki/Top_50_Influential_Women_in_Engineering"
@@ -8,7 +8,7 @@ response = requests.get(URL)
 #print(response.text[:200])
 
 page= response.text
-soup= bs(page)
+soup= bs(page, 'lxml')
 
 #scrape name of winners for 2016
 winners=soup.find_all('ul')[1].find_all('a')
