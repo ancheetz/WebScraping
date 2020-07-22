@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup 
-import requests
+import requests, csv, json
 
 source = requests.get('https://www.crummy.com/software/BeautifulSoup/bs4/doc/')
 page = source.text

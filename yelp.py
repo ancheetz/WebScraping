@@ -1,6 +1,4 @@
-import requests, re, json, dateutil.parser
-import numpy as np
-import pandas as pd
+import requests, re, json, dateutil.parser, csv
 from bs4 import BeautifulSoup as bs
 
 URL = "https://www.yelp.ca/biz/bar-karaoke-lounge-toronto"
@@ -36,8 +34,13 @@ print(date_rev)
 print(type(date_rev))
 
 yelp_dict = dict(zip(reviewer, review))
-print(yelp_dict)
+print(type(yelp_dict))
 
-yelp_info = [yelp_dict]
-yelp_df = pd.DataFrame(yelp_info)
-yelp_df.to_csv('Yelp_Review.csv')
+#now create CSV file from dict data
+
+with open('Yelp_Reviews.csv', 'w') as f:
+    for key in yelp_dict.keys():
+        f.write("%s, %s\n" % (key, yelp_dict[key]))
+
+
+
