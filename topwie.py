@@ -1,6 +1,4 @@
-import requests, re, json
-import pandas as pd
-import numpy as np 
+import requests, re, json, csv
 from bs4 import BeautifulSoup as bs
 
 URL = "https://en.wikipedia.org/wiki/Top_50_Influential_Women_in_Engineering"
@@ -38,10 +36,3 @@ print(top_2016_dict)
 top_2017_dict= degree_2017
 print(top_2017_dict)
 
-top_2016_info = [top_2016_dict]
-top_2016_df = pd.DataFrame(top_2016_info)
-top_2016_df.to_csv('Top_2016.csv')
-
-top_2017_info = [top_2017_dict]
-top_2017_df = pd.DataFrame(top_2017_info)
-top_2017_df.to_csv('Top_2017.csv')
