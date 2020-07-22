@@ -1,4 +1,6 @@
 import requests, re, json, dateutil.parser
+import numpy as np
+import pandas as pd
 from bs4 import BeautifulSoup as bs
 
 URL = "https://www.yelp.ca/biz/bar-karaoke-lounge-toronto"
@@ -32,3 +34,10 @@ date_rev = (json.dumps(date_vis, indent=4))
 print(date_rev)
 
 print(type(date_rev))
+
+yelp_dict = dict(zip(reviewer, review))
+print(yelp_dict)
+
+yelp_info = [yelp_dict]
+yelp_df = pd.DataFrame(yelp_info)
+yelp_df.to_csv('Yelp_Review.csv')
