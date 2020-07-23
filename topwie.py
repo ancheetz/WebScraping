@@ -45,3 +45,25 @@ print(top_2017_dict)
 with open("Top_Eng_17.csv", 'w') as fl:
     for key in top_2017_dict.keys():
         fl.write("%s, %s\n" % (key, top_2017_dict[key]))
+
+
+Top_Eng = {}
+
+
+Top_Eng['Win_2016'] = winners
+Top_Eng['Profile_16'] = degrees
+Top_Eng['Win_2017'] = winner_2017
+Top_Eng['Profile_17'] = degree_2017
+
+Top_Wom_Eng = (json.dumps(Top_Eng, indent=4))
+print(Top_Wom_Eng)
+
+with open("Top_2016.csv", 'w') as tw:
+    writer = csv.DictWriter(tw, fieldnames=["Name", "Profile"])
+    writer.writeheader()
+    writer.writerows(
+        [{"Name": w for w in winners},
+         {"Profile": p for p in degrees}]
+    )
+tw.close()
+
