@@ -30,9 +30,18 @@ degree_2017=[d.text for d in soup.find_all('ul')[2].find_all('li')]
 deg_2017= (json.dumps(degree_2017, indent=4))
 #print(deg_2017)
 
-top_2016_dict= degrees 
+#create dictionary of 2016; add 2016 as default value for each
+top_2016_dict = {year: "2016" for year in degrees}
 print(top_2016_dict)
+#create csv file for dictionary
+with open("Top_Eng_16.csv", 'w') as f:
+    for key in top_2016_dict.keys():
+        f.write("%s, %s\n" % (key, top_2016_dict[key]))
 
-top_2017_dict= degree_2017
+#create dictionary of 2017; add 2017 as default value for each 
+top_2017_dict = {year: "2017" for year in degree_2017}
 print(top_2017_dict)
-
+#create csv file for dictionary
+with open("Top_Eng_17.csv", 'w') as fl:
+    for key in top_2017_dict.keys():
+        fl.write("%s, %s\n" % (key, top_2017_dict[key]))
