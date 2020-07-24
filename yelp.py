@@ -37,11 +37,10 @@ def get_reviews(review_page, r_writer):
         review_dict['content'] = content
         r_writer.writerow(review_dict.values())
 
-with open('Yelp_Reviews.csv', 'w') as f:
+with open('Yelp_Reviews.csv', 'w', newline='') as f:
     rev_writer = csv.writer(f)
     header_names = ['Name', 'Location', 'Date', 'Rating', 'Content']
-    rev_writer = csv.writer(f, header_names)
-    rev_writer.writerows(header_names)
+    rev_writer.writerow(header_names)
     #must now use collected list of URLs to iterate through all reviews; then calling previous function to scrape one page, write data and compile as CSV
     for index, Url in enumerate(URLs):
         response = requests.get(URL)
