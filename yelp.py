@@ -1,46 +1,53 @@
-import requests, re, json, dateutil.parser, csv
+import requests, re, dateutil, csv, time
 from bs4 import BeautifulSoup as bs
 
 URL = "https://www.yelp.ca/biz/bar-karaoke-lounge-toronto"
 response = requests.get(URL)
 
-response.status_code
-#print(response.text[:200])
+page = (response.text)
+soup = bs(page, 'html.parser')
 
-page = response.text
-#type(page)
+#collect number of reviews in total
+total_rev = [t.text for t in soup.find_all('p', attrs={'class': 'lemon--p__373c0__3Qnnj text__373c0__2Kxyz text-color--mid__373c0__jCeOG text-align--left__373c0__2XGa- text-size--large__373c0__3t60B'})][0]
+total_rev = int(total_rev.split(' ')[0])
+print(type(total_rev))
 
-#store the webpage in soup
-soup = bs(page, 'lxml')
+#collect number of reviews per page 
+review_page = soup.find_all('div', attrs={'lemon--div__373c0__1mboc review__373c0__13kpL sidebarActionsHoverTarget__373c0__2kfhE arrange__373c0__2C9bH gutter-2__373c0__1DiLQ grid__373c0__1Pz7f layout-stack-small__373c0__27wVp border-color--default__373c0__3-ifU'})
+#print(review_page)
 
-#find reviewer name
-reviewer = [name.text for name in soup.find_all('div', 'a', 'href', class_='user-passport-info')]
-#convert list to json string, formatted with indents
-name = (json.dumps(reviewer, indent=4))
-#print(name)
-print(reviewer)
+#collect URLs for all pages of reviews; save these to list; 
+URLs = []
+for all in range(0, total_rev, 20):
+    URLs.append(URL+'?start='+str(all))
+    print(URLs)
 
-#find review
-review = [rev.text for rev in soup.find_all('span', lang='en')]
-#convert list to json string, formatted with indents
-rest_rev = (json.dumps(review, indent=6))
-#print(rest_rev)
+def get_reviews(review_page, r_writer):
+    for review in review_page:
+        name = review.find('a', attrs={'lemon--a__373c0__IEZFH link__373c0__1G70M link-color--inherit__373c0__3dzpk link-size--inherit__373c0__1VFlE'}).string
+        location = review.find('span', attrs={'lemon--span__373c0__3997G text__373c0__2Kxyz text-color--normal__373c0__3xep9 text-align--left__373c0__2XGa- text-weight--bold__373c0__1elNz text-size--small__373c0__3NVWO'}).string
+        date = review.find('span', attrs={'lemon--span__373c0__3997G text__373c0__2Kxyz text-color--mid__373c0__jCeOG text-align--left__373c0__2XGa-'}).text
+        rating = int(review.find('img', attrs={'lemon--img__373c0__3GQUb offscreen__373c0__1KofL'}).parent.get('aria-label')[0])
+        content = [r.text for r in review.find('p', attrs={'lemon--p__373c0__3Qnnj text__373c0__2Kxyz comment__373c0__3EKjH text-color--normal__373c0__3xep9 text-align--left__373c0__2XGa-'}).children]
+        review_dict = {}
+        review_dict['name'] = name
+        review_dict['location'] = location
+        review_dict['date'] = date
+        review_dict['rating'] = rating
+        review_dict['content'] = content
+        r_writer.writerow(review_dict.values())
 
-#find date of review
-date_vis = [d.text for d in soup.find_all('span', class_='text-color--mid__373c0__jCeOG')]
-#convert list tp json string,
-date_rev = (json.dumps(date_vis, indent=4))
-#print(date_rev)
-#print(type(date_rev))
-
-
-yelp_dict = dict(zip(reviewer, review))
-#print(type(yelp_dict))
-
-
-#now create CSV file from dict data
 with open('Yelp_Reviews.csv', 'w') as f:
-    for key in yelp_dict.keys():
-        f.write("%s, %s\n" % (key, yelp_dict[key]))
-
-
+    rev_writer = csv.writer(f)
+    header_names = ['Name', 'Location', 'Date', 'Rating', 'Content']
+    rev_writer = csv.writer(f, header_names)
+    rev_writer.writerows(header_names)
+    #must now use collected list of URLs to iterate through all reviews; then calling previous function to scrape one page, write data and compile as CSV
+    for index, Url in enumerate(URLs):
+        response = requests.get(URL)
+        soup = bs(response.text, 'html.parser')
+        review_page = soup.find_all('div', attrs={'lemon--div__373c0__1mboc review__373c0__13kpL sidebarActionsHoverTarget__373c0__2kfhE arrange__373c0__2C9bH gutter-2__373c0__1DiLQ grid__373c0__1Pz7f layout-stack-small__373c0__27wVp border-color--default__373c0__3-ifU'})
+        #my function
+        get_reviews(review_page, rev_writer)
+        time.sleep(2)
+        print('Completed scraping page'+str(index+1))
