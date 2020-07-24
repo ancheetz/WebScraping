@@ -13,8 +13,9 @@ total_rev = [t.text for t in soup.find_all('p', attrs={'class': 'lemon--p__373c0
 total_rev = int(total_rev.split(' ')[0])
 print(total_rev)
 
-#collect number of reviews per page
+#collect entire page of reviews and full resource
 review_page = soup.find_all('div', attrs={'lemon--div__373c0__1mboc review__373c0__13kpL sidebarActionsHoverTarget__373c0__2kfhE arrange__373c0__2C9bH gutter-2__373c0__1DiLQ grid__373c0__1Pz7f layout-stack-small__373c0__27wVp border-color--default__373c0__3-ifU'})
+# number of reviews per page
 revs_page = (len(review_page))
 print(type(revs_page))
 
