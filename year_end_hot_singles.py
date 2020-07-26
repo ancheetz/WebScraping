@@ -8,56 +8,40 @@ response = requests.get(URL)
 page = (response.text)
 soup = bs(page, 'html.parser')
 
-
-song_num = []
-song_title = []
-song_link = []
-artist = []
-artist_link = []
-artist_bio = []
-artist_song = []
-
 #Collect each row of data for our songs
 full_list = soup.find_all('tr')
 full_list = full_list[1:101]
 
+def Year_End_Singles(full_list, csvwriter):
 #Loop through all data
-for list in full_list:
-    
-    #Song number
-    num = list.th.text
-    song_num.append(num)
+    for list in full_list:
+        
+        #Song number
+        num = list.th.text.strip()
 
-    #Song title
-    all_titles = ([t.text for t in list.find_all('a')])
-    song = all_titles[0]
-    song_title.append(song)
+        #Song title
+        all_titles = ([t.text for t in list.find_all('a')])[0]
 
-    #Song href
-    all_links = [a.get('href') for a in list.find_all('a', attrs={'href': re.compile("^/wiki/")})]
-    s_links = all_links[0]
-    song_link.append(s_links)
+        #Song href
+        all_links = [a.get('href') for a in list.find_all('a', attrs={'href': re.compile("^/wiki/")})][0]
 
-    #Artist href
-    all_art_links = [a.get('href') for a in list.find_all('a', attrs={'href': re.compile("^/wiki/")})]
-    a_links = all_art_links[1:]
-    artist_link.append(a_links)
+        #Artist href
+        all_art_links = [a.get('href') for a in list.find_all('a', attrs={'href': re.compile("^/wiki/")})][1:] 
 
-    #Artist name
-    all_artist_links = ([t.text for t in list.find_all('a')])
-    art_links = all_artist_links[1:]
-    artist.append(art_links)
+        #Artist name
+        artist_links = ([t.text for t in list.find_all('a')])[1:]
 
-    ##Bio for Artist
+        hot_100_dict ={}
+        hot_100_dict['Ranking'] = num
+        hot_100_dict['Title'] = all_titles
+        hot_100_dict['Song Link'] = all_links
+        hot_100_dict['Artist(s)'] = artist_links
+        hot_100_dict['Artist Links'] = all_art_links
+        csvwriter.writerow(hot_100_dict.values())
 
-    ##Bio for Song
-
-
-
-print(artist_link)
-print(song_link)
-print(artist)
-print(song_title)
-print(song_num)
-
-#print(all_links)    
+with open('Top_100_Hits.csv', 'w', newline='', encoding='utf-8') as file:
+    csvwriter = csv.writer(file)
+    headers = ['Ranking', 'Title', 'Song Link', 'Artist(s)', 'Artist Links']
+    csvwriter.writerow(headers)
+    Year_End_Singles(full_list, csvwriter)
+    print('Web Scraping Done! List Compiled')
