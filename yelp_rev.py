@@ -19,7 +19,7 @@ review_page = soup.find_all('div', attrs={'lemon--div__373c0__1mboc review__373c
 revs_page = (len(review_page))
 print(type(revs_page))
 
-#collect number of pages of reviews; use these to iterate over and generate all reviews for location
+#collect number of reviews per page
 review_page = soup.find_all('div', attrs={'lemon--div__373c0__1mboc review__373c0__13kpL sidebarActionsHoverTarget__373c0__2kfhE arrange__373c0__2C9bH gutter-2__373c0__1DiLQ grid__373c0__1Pz7f layout-stack-small__373c0__27wVp border-color--default__373c0__3-ifU'})
 print(len(review_page))
 
