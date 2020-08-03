@@ -8,9 +8,9 @@ page = (response.text)
 soup = bs(page, 'html.parser')
 
 #collect number of reviews in total
-total_rev = [t.text for t in soup.find_all('p', attrs={'class': 'lemon--p__373c0__3Qnnj text__373c0__2Kxyz text-color--mid__373c0__jCeOG text-align--left__373c0__2XGa- text-size--large__373c0__3t60B'})][0]
-total_rev = int(total_rev.split(' ')[0])
-print(type(total_rev))
+total_rev = soup.find('div', attrs={'class': 'lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT border-color--default__373c0__3-ifU nowrap__373c0__35McF'}).string.split(' ')[0]
+total_rev = int(total_rev)
+#print(total_rev)
 
 #collect number of reviews per page 
 review_page = soup.find_all('div', attrs={'lemon--div__373c0__1mboc review__373c0__13kpL sidebarActionsHoverTarget__373c0__2kfhE arrange__373c0__2C9bH gutter-2__373c0__1DiLQ grid__373c0__1Pz7f layout-stack-small__373c0__27wVp border-color--default__373c0__3-ifU'})
