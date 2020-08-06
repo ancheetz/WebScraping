@@ -11,9 +11,8 @@ soup = bs(page, 'html.parser')
 
 #SQL connection data to connect and save the data
 HOST = 'localhost'
-USERNAME = 'andrea'
-PASSWORD = 'Star1982'
-DATABASE = 'andreadb'
+USERNAME = 'root'
+DATABASE = 'WebScraping'
 
 #collect number of reviews in total
 total_rev = soup.find('div', attrs={'class': 'lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT border-color--default__373c0__3-ifU nowrap__373c0__35McF'}).string.split(' ')[0]
@@ -45,22 +44,24 @@ def get_reviews(review_page, r_writer):
         review_dict['content'] = content
         r_writer.writerow(review_dict.values())
         #open db connection
-        db = mysql.connector.connect(host='localhost', user='andrea', password='Star1982', database='Reviews')
+        db = mysql.connector.connect(host='localhost', user='root', database='WebScraping')
         print(db)
         #prepare a cursor object using cursor() method
         cursor = db.cursor()
         #prepare SQL query to INSERT a record into the database
-        sql = "INSERT INTO Reviews(name, location, date, rating, content) VALUES ('{}', '{}', '{}', '{}','{}')".format(name, location, date, rating, content) 
-        try: 
+        sql = "INSERT INTO WebScraping.Reviews(name, location, date, rating, content) VALUES (%s, %s, %s, %s, %s)"
+        try:
             #execute the SQL command
-            cursor.execute(sql)
+            cursor.execute(sql(name, location, date, rating, content))
             #commit your changes in the database
             db.commit()
+            print("Record committed")
         except:
-            #rollback in case there is any error
+            #Rollback if there is an error
             db.rollback()
-            #disconnect from the server
-            db.close()
+        #disconnect from the server
+        cursor.close()
+        db.close()
 
 
 with open('Yelp_Reviews.csv', 'w', newline='') as f:

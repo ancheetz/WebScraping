@@ -1,5 +1,5 @@
 import mysql
 import mysql.connector
 
-db = mysql.connector.connect(host="localhost", user="andrea", password="Star1982")
+db = mysql.connector.connect(host="localhost", user="root")
 print(db)
