@@ -35,7 +35,7 @@ def get_reviews(review_page, r_writer):
         location = review.find('span', attrs={'lemon--span__373c0__3997G text__373c0__2Kxyz text-color--normal__373c0__3xep9 text-align--left__373c0__2XGa- text-weight--bold__373c0__1elNz text-size--small__373c0__3NVWO'}).string
         date = review.find('span', attrs={'lemon--span__373c0__3997G text__373c0__2Kxyz text-color--mid__373c0__jCeOG text-align--left__373c0__2XGa-'}).text
         rating = int(review.find('img', attrs={'lemon--img__373c0__3GQUb offscreen__373c0__1KofL'}).parent.get('aria-label')[0])
-        content = [r.text for r in review.find('p', attrs={'lemon--p__373c0__3Qnnj text__373c0__2Kxyz comment__373c0__3EKjH text-color--normal__373c0__3xep9 text-align--left__373c0__2XGa-'}).children]
+        writing = str([r.text for r in review.find('p', attrs={'lemon--p__373c0__3Qnnj text__373c0__2Kxyz comment__373c0__3EKjH text-color--normal__373c0__3xep9 text-align--left__373c0__2XGa-'}).children])
         
         #open db connection
         db = mysql.connector.connect(host='localhost', user='root', database='WebScraping')
@@ -43,11 +43,11 @@ def get_reviews(review_page, r_writer):
         #prepare a cursor object using cursor() method
         cursor = db.cursor()
         #prepare SQL query to INSERT a record into the database
-        sql = """INSERT INTO WebScraping.Reviews(name, location, date, rating, content) VALUES (%s, %s, STR_TO_DATE(%s, '%m/%d/%Y'), %s, %s)"""
-       #try:
-            #execute the SQL command
-        cursor.execute(sql, (name, location, date, rating, content))
-       #commit your changes in the database
+        sql = """INSERT INTO WebScraping.Reviews(name, location, date, rating, writing) VALUES (%s, %s, STR_TO_DATE(%s, '%m/%d/%Y'), %s, %s)"""
+        #try:
+        #execute the SQL command
+        cursor.execute(sql, (name, location, date, rating, writing))
+        #commit your changes in the database
         db.commit()
         print("Record committed")
         #except:
@@ -62,11 +62,11 @@ def get_reviews(review_page, r_writer):
         review_dict['location'] = location
         review_dict['date'] = date
         review_dict['rating'] = rating
-        review_dict['content'] = content
+        review_dict['writing'] = writing
         r_writer.writerow(review_dict.values())
 
 
-with open('Yelp_Reviews.csv', 'w', newline='') as f:
+with open('Yelp_Reviews.csv', 'w', newline='', encoding='utf') as f:
     rev_writer = csv.writer(f)
     header_names = ['Name', 'Location', 'Date', 'Rating', 'Content']
     rev_writer.writerow(header_names)
