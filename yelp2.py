@@ -36,13 +36,7 @@ def get_reviews(review_page, r_writer):
         date = review.find('span', attrs={'lemon--span__373c0__3997G text__373c0__2Kxyz text-color--mid__373c0__jCeOG text-align--left__373c0__2XGa-'}).text
         rating = int(review.find('img', attrs={'lemon--img__373c0__3GQUb offscreen__373c0__1KofL'}).parent.get('aria-label')[0])
         content = [r.text for r in review.find('p', attrs={'lemon--p__373c0__3Qnnj text__373c0__2Kxyz comment__373c0__3EKjH text-color--normal__373c0__3xep9 text-align--left__373c0__2XGa-'}).children]
-        review_dict = {}
-        review_dict['name'] = name
-        review_dict['location'] = location
-        review_dict['date'] = date
-        review_dict['rating'] = rating
-        review_dict['content'] = content
-        r_writer.writerow(review_dict.values())
+        
         #open db connection
         db = mysql.connector.connect(host='localhost', user='root', database='WebScraping')
         print(db)
@@ -62,6 +56,14 @@ def get_reviews(review_page, r_writer):
         #disconnect from the server
         cursor.close()
         db.close()
+
+        review_dict = {}
+        review_dict['name'] = name
+        review_dict['location'] = location
+        review_dict['date'] = date
+        review_dict['rating'] = rating
+        review_dict['content'] = content
+        r_writer.writerow(review_dict.values())
 
 
 with open('Yelp_Reviews.csv', 'w', newline='') as f:
