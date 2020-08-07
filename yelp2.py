@@ -49,10 +49,10 @@ def get_reviews(review_page, r_writer):
         #prepare a cursor object using cursor() method
         cursor = db.cursor()
         #prepare SQL query to INSERT a record into the database
-        sql = "INSERT INTO WebScraping.Reviews(name, location, date, rating, content) VALUES (%s, %s, %s, %s, %s)"
+        sql = """INSERT INTO WebScraping.Reviews(name, location, date, rating, content) VALUES (%s, %s, STR_TO_DATE(%s, '%m/%d/%Y'), %s, %s)"""
        #try:
             #execute the SQL command
-        cursor.execute(sql(name, location, date, rating, content))
+        cursor.execute(sql, (name, location, date, rating, content))
        #commit your changes in the database
         db.commit()
         print("Record committed")
