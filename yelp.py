@@ -43,25 +43,6 @@ def get_reviews(review_page, r_writer):
         review_dict['rating'] = rating
         review_dict['content'] = content
         r_writer.writerow(review_dict.values())
-        #open db connection
-        db = mysql.connector.connect(host='localhost', user='root', database='WebScraping')
-        print(db)
-        #prepare a cursor object using cursor() method
-        cursor = db.cursor()
-        #prepare SQL query to INSERT a record into the database
-        sql = "INSERT INTO WebScraping.Reviews(name, location, date, rating, content) VALUES (%s, %s, %s, %s, %s)"
-        try:
-            #execute the SQL command
-            cursor.execute(sql(name, location, date, rating, content))
-            #commit your changes in the database
-            db.commit()
-            print("Record committed")
-        except:
-            #Rollback if there is an error
-            db.rollback()
-        #disconnect from the server
-        cursor.close()
-        db.close()
 
 
 with open('Yelp_Reviews.csv', 'w', newline='') as f:
