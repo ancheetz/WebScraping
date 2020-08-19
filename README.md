@@ -1,5 +1,5 @@
 # WebScraping
-Python Web Scraping App collection:
+Python Web Scraping Applications.
 
 Webscraping Installation:
 
