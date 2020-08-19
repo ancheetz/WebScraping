@@ -1,4 +1,7 @@
 # WebScraping
 Python Web Scraping App collection:
 
-Collection of various apps to pull and parse data, then clean and compile in csv files.
+Webscraping Installation:
+-install python3, pip, git
+-import python libraries: beautifulSoup4, requests, csv, time
+-import mysqldb, mysql.connector
