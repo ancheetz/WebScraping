@@ -4,8 +4,5 @@ boto3==1.14.30
 botocore==1.17.30
 json5==0.9.1
 lxml==4.5.0
-pytest-remotedata==0.3.2
 python-dateutil==2.8.1
-python-jsonrpc-server==0.3.4
-python-language-server==0.31.7
 requests==2.22.0
