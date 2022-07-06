@@ -3,6 +3,6 @@ beautifulsoup4==4.8.2
 boto3==1.14.30
 botocore==1.17.30
 json5==0.9.1
-lxml==4.5.0
+lxml==4.9.1
 python-dateutil==2.8.1
 requests==2.22.0
